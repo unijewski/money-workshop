@@ -18,4 +18,12 @@ RSpec.describe Money do
       it { expect(money.to_s).to eq("10.00 #{currency.upcase}") }
     end
   end
+
+  describe "#Money" do
+    it "creates a Money object" do
+      money = Money(10, "PLN")
+      expect(money).to be_an_instance_of(Money)
+      expect(money.to_s).to eq("10.00 PLN")
+    end
+  end
 end
