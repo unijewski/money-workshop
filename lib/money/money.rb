@@ -41,6 +41,20 @@ class Money
     Exchange.new
   end
 
+  def method_missing(method_name)
+    raise NoMethodError unless method_name.to_s.start_with?("to_")
+
+    currency = method_name.to_s.split("_").last
+    return super unless allowed_currency?(currency)
+
+    exchange_to(currency)
+  end
+
+  def respond_to_missing?(method_name, include_private = false)
+    currency = method_name.to_s.split("_").last
+    method_name.start_with?("to_") && allowed_currency?(currency) || super
+  end
+
   private
 
   def allowed_currency?(currency)

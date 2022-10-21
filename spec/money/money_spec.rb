@@ -50,4 +50,28 @@ RSpec.describe Money do
       end
     end
   end
+
+  describe "#method_missing" do
+    context "when a currency exists" do
+      before do
+        allow(CurrencyConverterApi)
+          .to receive_message_chain(:get, :parsed_response)
+          .and_return("success" => true, "result" => 8.78395)
+      end
+
+      it "does not raise an error", :aggregate_failures do
+        expect(subject.respond_to?(:to_eur)).to eq(true)
+        expect { subject.to_eur }.not_to raise_error
+      end
+    end
+
+    context "when a currency does not exist" do
+      it "raises an error", :aggregate_failures do
+        expect { subject.asd_eur }.to raise_error(NoMethodError)
+        expect(subject.respond_to?(:asd_eur)).to eq(false)
+        expect { subject.to_asd }.to raise_error(NoMethodError)
+        expect(subject.respond_to?(:to_asd)).to eq(false)
+      end
+    end
+  end
 end
