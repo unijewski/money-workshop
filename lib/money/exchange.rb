@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "currency_converter_api"
 
 class Exchange

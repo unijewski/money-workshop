@@ -18,14 +18,18 @@ RSpec.describe Money do
   %w[usd eur gbp chf pln].each do |currency|
     describe ".from_#{currency}", :aggregate_failures do
       money = described_class.public_send("from_#{currency}", 10)
-      it { expect(money).to be_an_instance_of(Money) }
-      it { expect(money.to_s).to eq("10.00 #{currency.upcase}") }
+
+      it do
+        expect(money).to be_an_instance_of(Money)
+        expect(money.to_s).to eq("10.00 #{currency.upcase}")
+      end
     end
   end
 
   describe "#Money" do
-    it "creates a Money object" do
+    it "creates a Money object", :aggregate_failures do
       money = Money(10, "PLN")
+
       expect(money).to be_an_instance_of(Money)
       expect(money.to_s).to eq("10.00 PLN")
     end

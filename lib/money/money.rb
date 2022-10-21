@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "configuration"
 require_relative "exchange"
 require "bigdecimal"
@@ -62,7 +64,7 @@ class Money
 
   def respond_to_missing?(method_name, include_private = false)
     currency = method_name.to_s.split("_").last
-    method_name.start_with?("to_") && allowed_currency?(currency) || super
+    (method_name.start_with?("to_") && allowed_currency?(currency)) || super
   end
 
   def <=>(other)
