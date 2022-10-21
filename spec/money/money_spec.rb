@@ -74,4 +74,17 @@ RSpec.describe Money do
       end
     end
   end
+
+  describe "#<=>" do
+    before do
+      allow(CurrencyConverterApi)
+        .to receive_message_chain(:get, :parsed_response)
+        .and_return("success" => true, "result" => 8.78395)
+    end
+
+    it do
+      expect(subject < Money(10, "GBP")).to eq(true)
+      expect(Money(10, "USD") == Money(8.78395, "GBP")).to eq(true)
+    end
+  end
 end

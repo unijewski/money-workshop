@@ -2,6 +2,8 @@ require_relative "exchange"
 require "bigdecimal"
 
 class Money
+  include Comparable
+
   attr_accessor :amount, :currency
 
   CURRENCIES = %w[usd eur gbp chf pln].freeze
@@ -53,6 +55,10 @@ class Money
   def respond_to_missing?(method_name, include_private = false)
     currency = method_name.to_s.split("_").last
     method_name.start_with?("to_") && allowed_currency?(currency) || super
+  end
+
+  def <=>(other)
+    exchange_to(other.currency).amount <=> other.amount
   end
 
   private
