@@ -1,3 +1,4 @@
+require_relative "exchange"
 require "bigdecimal"
 
 class Money
@@ -18,15 +19,31 @@ class Money
     "#<Money #{precise_amount} (#{currency})>"
   end
 
+  def precise_amount
+    format("%.2f", amount)
+  end
+
   CURRENCIES.each do |currency|
     define_singleton_method("from_#{currency}") do |argument|
       new(argument, currency)
     end
   end
 
+  def exchange_to(currency)
+    raise ArgumentError, "Currency not supported" unless allowed_currency?(currency)
+
+    self.amount = Money.exchange.convert(self, currency)
+    self.currency = currency.upcase
+    self
+  end
+
+  def self.exchange
+    Exchange.new
+  end
+
   private
 
-  def precise_amount
-    format("%.2f", amount)
+  def allowed_currency?(currency)
+    CURRENCIES.include?(currency.downcase)
   end
 end

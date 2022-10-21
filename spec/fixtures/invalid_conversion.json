@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": 401,
+    "info": "You have entered an invalid \"from\" property. [Example: from=EUR]"
+  },
+  "success": false
+}
