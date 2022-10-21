@@ -101,4 +101,22 @@ RSpec.describe Money do
       end
     end
   end
+
+  describe "arithmetic operations" do
+    before do
+      allow(CurrencyConverterApi)
+        .to receive_message_chain(:get, :parsed_response)
+        .and_return("success" => true, "result" => 8.78395)
+    end
+
+    it "adds two currencies" do
+      subject = Money(10, "GBP") + Money(10, "USD")
+      expect(subject.to_s).to eq("18.78 GBP")
+    end
+
+    it "multiplies the currency by the given number" do
+      subject = Money(10, "USD") * 3
+      expect(subject.to_s).to eq("30.00 USD")
+    end
+  end
 end

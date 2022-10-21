@@ -74,6 +74,20 @@ class Money
     self.default_currency = nil
   end
 
+  %i[+ -].each do |method|
+    define_method(method) do |arg|
+      self.amount = amount.public_send(method, arg.exchange_to(currency).amount)
+      self
+    end
+  end
+
+  %i[* /].each do |method|
+    define_method(method) do |arg|
+      self.amount = amount.public_send(method, arg)
+      self
+    end
+  end
+
   private
 
   def allowed_currency?(currency)
