@@ -119,4 +119,16 @@ RSpec.describe Money do
       expect(subject.to_s).to eq("30.00 USD")
     end
   end
+
+  describe "#configure" do
+    before do
+      Money.configure do |config|
+        config.api_key = "whatever"
+      end
+    end
+
+    it "returns api_key" do
+      expect(Money.configuration.api_key).to eq("whatever")
+    end
+  end
 end

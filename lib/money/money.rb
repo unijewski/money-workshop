@@ -1,3 +1,4 @@
+require_relative "configuration"
 require_relative "exchange"
 require "bigdecimal"
 
@@ -8,6 +9,7 @@ class Money
 
   class << self
     attr_accessor :default_currency
+    attr_writer :configuration
   end
 
   CURRENCIES = %w[usd eur gbp chf pln].freeze
@@ -86,6 +88,14 @@ class Money
       self.amount = amount.public_send(method, arg)
       self
     end
+  end
+
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
+
+  def self.configure
+    yield(configuration)
   end
 
   private
