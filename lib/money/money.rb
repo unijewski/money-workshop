@@ -6,9 +6,15 @@ class Money
 
   attr_accessor :amount, :currency
 
+  class << self
+    attr_accessor :default_currency
+  end
+
   CURRENCIES = %w[usd eur gbp chf pln].freeze
 
-  def initialize(amount, currency)
+  def initialize(amount, currency = Money.default_currency)
+    raise ArgumentError if currency.nil?
+
     @amount = BigDecimal(amount.to_s)
     @currency = currency.upcase
   end
@@ -59,6 +65,13 @@ class Money
 
   def <=>(other)
     exchange_to(other.currency).amount <=> other.amount
+  end
+
+  def self.using_default_currency(currency)
+    self.default_currency = currency
+    yield
+  ensure
+    self.default_currency = nil
   end
 
   private

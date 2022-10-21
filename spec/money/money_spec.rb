@@ -87,4 +87,18 @@ RSpec.describe Money do
       expect(Money(10, "USD") == Money(8.78395, "GBP")).to eq(true)
     end
   end
+
+  describe ".using_default_currency" do
+    context "when we create a new instance inside the block" do
+      it "creates the instance" do
+        expect(Money.using_default_currency("usd") { Money.new(10) }).to be_an_instance_of(Money)
+      end
+    end
+
+    context "when we create a new instance without the block" do
+      it "raises an error" do
+        expect { Money.new(10) }.to raise_error(ArgumentError)
+      end
+    end
+  end
 end
